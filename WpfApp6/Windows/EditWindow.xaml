@@ -1,0 +1,113 @@
+﻿<Window x:Class="WpfApp6.Windows.EditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp6.Windows"
+        mc:Ignorable="d"
+        Title="Окно редактирования" 
+        Height="980"
+        MinHeight="980"
+        Width="745"
+        MinWidth="745"
+        FontFamily="Comic Sans MS"
+        Icon="../Images/icon.ico"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="0.1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" DataContext="{Binding product}">
+            <Label Content="Артикул товара" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <TextBox Width="350" x:Name="txtArticul" VerticalContentAlignment="Center" Validation.ErrorTemplate="{StaticResource errorTemplate}" IsEnabled="False" VerticalAlignment="Center">
+                <TextBox.Text>
+                    <Binding Path="ProductArticleNumber" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Label Content="Наименование товара" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <TextBox Width="350" x:Name="txtProductName" VerticalAlignment="Center" Validation.ErrorTemplate="{StaticResource errorTemplate}">
+                <TextBox.Text>
+                    <Binding Path="ProductName" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Label Content="Описание товара" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <TextBox  Width="350" x:Name="txtDescription" Validation.ErrorTemplate="{StaticResource errorTemplate}" VerticalAlignment="Center">
+                <TextBox.Text>
+                    <Binding Path="ProductDescription" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Label Content="Категория товара" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <ComboBox Width="350" x:Name="cmbCategory" DisplayMemberPath="CategoryName" SelectedItem="{Binding Category}" VerticalAlignment="Center"/>
+            <Label Content="Изображение товара" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <Image Source="{Binding ProductPhoto}" x:Name="image" Width="200" Height="200"/>
+            <Button x:Name="btnAddImage" Click="btnAddImage_Click" Content="Добавить изображение" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,2" Width="350"></Button>
+            <Label Content="Производитель товара" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <ComboBox Width="350" x:Name="cmbManufacturer" DisplayMemberPath="ManufacturerName" SelectedItem="{Binding Manufacturer}" VerticalAlignment="Center"/>
+            <Label Content="Поставщик товара" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <ComboBox Width="350" x:Name="cmbSupplier" DisplayMemberPath="SupplierName" SelectedItem="{Binding Supplier}" VerticalAlignment="Center"/>
+            <Label Content="Цена товара" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <TextBox  Width="350" x:Name="txtPrice" VerticalAlignment="Center" Validation.ErrorTemplate="{StaticResource errorTemplate}">
+                <TextBox.Text>
+                    <Binding Path="ProductPrice" StringFormat="{}{0:N2}"  ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Label Content="Скидка" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <TextBox Width="350" x:Name="txtDiscount" VerticalAlignment="Center" Validation.ErrorTemplate="{StaticResource errorTemplate}">
+                <TextBox.Text>
+                    <Binding Path="ProductDiscount"  ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Label Content="Максимальная скидка" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <TextBox Width="350" x:Name="txtmaxDiscount" VerticalAlignment="Center" Validation.ErrorTemplate="{StaticResource errorTemplate}">
+                <TextBox.Text>
+                    <Binding Path="ProductMaxDescount"  ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Label Content="Количество товара" FontSize="13" HorizontalAlignment="Center" ></Label>
+            <TextBox Width="350" x:Name="txtQuantity" VerticalAlignment="Center" Validation.ErrorTemplate="{StaticResource errorTemplate}">
+                <TextBox.Text>
+                    <Binding Path="ProductQuantity"  ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Label Content="Единица измерения" HorizontalAlignment="Center" FontSize="13" ></Label>
+            <ComboBox Width="350" x:Name="cmbUnit" SelectedItem="{Binding Unit}" DisplayMemberPath="UnitName" VerticalAlignment="Center"/>
+        </StackPanel>
+        <Button Content="Сохранить изменения" FontSize="13" Name="btnEdit" Click="btnEdit_Click" Grid.Row="12"></Button>
+        <Button Content="Удалить продукт" FontSize="13" Name="btnDelete" Click="btnDelete_Click" Grid.Row="13" Grid.Column="1"></Button>
+    </Grid>
+</Window>

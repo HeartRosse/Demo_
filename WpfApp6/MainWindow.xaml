@@ -1,0 +1,40 @@
+﻿<Window x:Class="WpfApp6.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp6"
+        mc:Ignorable="d"
+        Title="ООО Ювелир" 
+        Height="515"
+        MinHeight="515"
+        Width="365"
+        MinWidth="365"
+        FontFamily="Comic Sans MS"
+        Icon="Images/icon.ico"
+        WindowStartupLocation="CenterScreen"
+        >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <Image Source="Images/logo.png" Width="140"/>
+            <Label Content="Добро пожаловать" FontSize="13" HorizontalAlignment="Center" Margin="0,15,0,0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <Label Content="Введите логин" Margin="0,0,0,3" HorizontalAlignment="Center" FontSize="13"></Label>
+            <TextBox Name="txtLogin" Width="200" FontSize="14"></TextBox>
+            <Label Content="Введите пароль" HorizontalAlignment="Center" FontSize="13"></Label>
+            <PasswordBox Name="txtPass" Width="200" FontSize="14" ></PasswordBox>
+            <Canvas Height="40" Width="200"  Name="canvas" Visibility="Collapsed" Margin="0,4,0,0" HorizontalAlignment="Center"/>
+            <TextBox Visibility="Collapsed" Name="txtCaptcha" Margin="0,7,0,0" Width="200"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Margin="0,0,0,0" VerticalAlignment="Top">
+            <Button Name="btnLogin" Click="btnLogin_Click" Width="200" FontSize="13" Content="Войти"></Button>
+            <Button Name="btnGuest" Width="200" FontSize="13" Content='Войти как "гость"' Margin="0,20,0,0"></Button>
+        </StackPanel>
+    </Grid>
+</Window>
