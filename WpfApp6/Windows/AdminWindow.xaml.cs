@@ -38,8 +38,10 @@ namespace WpfApp6.Windows
             new ItemSort() {DisplayName = "Сбросить", PropertyName = null, isAscending = true },
             new ItemSort() {DisplayName = "Товары от А-Я", PropertyName = "ProductName", isAscending = true },
             new ItemSort() {DisplayName = "Товары от Я-А", PropertyName = "ProductName", isAscending = false },
-            new ItemSort() {DisplayName = "По возрастанию", PropertyName = "ProductPrice", isAscending = true },
-            new ItemSort() {DisplayName = "По убыванию", PropertyName = "ProductPrice", isAscending = false },
+            new ItemSort() {DisplayName = "По возрастанию цены", PropertyName = "ProductPrice", isAscending = true },
+            new ItemSort() {DisplayName = "По убыванию цены", PropertyName = "ProductPrice", isAscending = false },
+            new ItemSort() {DisplayName = "По возрастанию остатка", PropertyName = "ProductQuantity", isAscending = true },
+            new ItemSort() {DisplayName = "По убыванию остатка", PropertyName = "ProductQuantity", isAscending = false },
         };
         public AdminWindow()
         {
@@ -72,57 +74,62 @@ namespace WpfApp6.Windows
 
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Search(txtSearch.Text.Trim());
+            Filter();
         }
 
-        private void Search(string substring)
+        private void Filter()
         {
+            int count = 0;
             ICollectionView view = CollectionViewSource.GetDefaultView(listView.ItemsSource);
             if (view == null) return;
-            int count = 0;
             view.Filter = new Predicate<object>(obj =>
             {
-                bool isView = ((DB.Product)obj).ProductName.ToLower().Contains(substring.ToLower());
-                if (isView) count++;
-                return isView;
+                DB.Product product = obj as DB.Product;
+                bool result = true;
+                if (txtSearch.Text.Trim().Length > 0)
+                {
+                    string searchtext = txtSearch.Text.Trim().ToLower();
+                    result = product.ProductName.ToLower().Contains(searchtext)
+                    || product.ProductManufacturer.ToLower().Contains(searchtext)
+                    || product.ProductArticleNumber.ToLower().Contains(searchtext)
+                    || product.ProductSupplier.ToLower().Contains(searchtext)
+                    || product.ProductCategory.ToLower().Contains(searchtext)
+                    || product.ProductDescription.ToLower().Contains(searchtext);
+                }
+                if (cmbManufacturer.SelectedIndex > 0)
+                {
+                    var manufacturer = cmbManufacturer.SelectedItem as DB.Manufacturer;
+                    result &= product.ProductManufacturer == manufacturer.ManufacturerName;
+                }
+                return result;
             });
+            view.SortDescriptions.Clear();
+            if (cmbSort.SelectedIndex > 0)
+            {
+                ItemSort itemSort = cmbSort.SelectedItem as ItemSort;
+                view.SortDescriptions.Add(new SortDescription(itemSort.PropertyName, itemSort.isAscending ? ListSortDirection.Ascending : ListSortDirection.Descending));
+            }
+            count = ViewCounter(view);
             currentCount.Text = count.ToString();
         }
 
+        private int ViewCounter(ICollectionView view)
+        {
+            int count = 0;
+            foreach (var item in view)
+            {
+                count++;
+            }
+            return count;
+        }
         private void cmbManufacturer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DB.Manufacturer manufacturer = cmbManufacturer.SelectedItem as DB.Manufacturer;
-            ManufacturerFilter(manufacturer.ManufacturerName);
+            Filter();
         }
-
-        private void ManufacturerFilter(string manufacturerName)
-        {
-            ICollectionView view = CollectionViewSource.GetDefaultView(listView.ItemsSource);
-            if (view == null) return;
-            view.Filter = new Predicate<object>(obj =>
-            {
-                if (manufacturerName == "Все производители") return true;
-                return ((DB.Product)obj).ProductManufacturer == manufacturerName;
-            });
-        }
-
         private void cmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ItemSort itemSort = cmbSort.SelectedItem as ItemSort;
-            SortByItem(itemSort.PropertyName, itemSort.isAscending);
+            Filter();
         }
-
-        private void SortByItem(string propertyName, bool isAscending)
-        {
-            ICollectionView view = CollectionViewSource.GetDefaultView(listView.ItemsSource);
-            if (view == null) return;
-            view.SortDescriptions.Clear();
-            if (propertyName != null)
-            {
-                view.SortDescriptions.Add(new SortDescription(propertyName, isAscending ? ListSortDirection.Ascending : ListSortDirection.Descending));
-            }
-        }
-
         private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (editWindow != null) return;
